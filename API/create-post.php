@@ -1,11 +1,8 @@
 <?php
 
 require("../config/db_conn.php");
+require("../config/auth.php");
 
-// PLACEHOLDER USER ID
-// THIS IS GOING TO COME FROM JWT
-// FOR NOW THIS IS JUST TO MAKE SURE THE POSTS WORK
-$user_id = 1;
 
 //User Input Variable
 $new_post_data = json_decode(file_get_contents("php://input"));
@@ -23,20 +20,37 @@ $post_hotlink = $new_post_data->post_hotlink;
 if (!empty($new_post_data->subforum_id) && !empty($new_post_data->post_title) 
 && !empty($new_post_data->post_content)){
 
-    $createPost = new createPost_Query;
-    $createPost->sql = 'INSERT INTO fiftybitdotchat.posts(user_id, subforum_id, post_title, post_content, post_hotlink )
-    VALUES (:user_id, :subforum_id, :post_title, :post_content, :post_hotlink)';
-    $createPost->user_id = $user_id;
-    $createPost->subforum_id = $subforum_id;
-    $createPost->post_title = $post_title;
-    $createPost->post_content = $post_content;
-    $createPost->post_hotlink = $post_hotlink;
+    $headers = apache_request_headers();
+    $token = str_replace('Bearer ', '', $headers['Authorization']);
 
-    $createPost->query_db();
+        $check_auth = new auth_token;
+        $check_auth->token = $token;
+        $check_auth->authenticate();
 
-    http_response_code(200);
-    echo json_encode(array("message" => "Post Created!"));
+        if (!empty($check_auth->decoded->user_id)){
 
+            $user_id = $check_auth->decoded->user_id;
+
+            $createPost = new createPost_Query;
+            $createPost->sql = 'INSERT INTO fiftybitdotchat.posts(user_id, subforum_id, post_title, post_content, post_hotlink )
+            VALUES (:user_id, :subforum_id, :post_title, :post_content, :post_hotlink)';
+            $createPost->user_id = $user_id;
+            $createPost->subforum_id = $subforum_id;
+            $createPost->post_title = $post_title;
+            $createPost->post_content = $post_content;
+            $createPost->post_hotlink = $post_hotlink;
+        
+            $createPost->query_db();
+        
+            http_response_code(200);
+            echo json_encode(array("message" => "Post Created!"));
+
+        }else{
+
+            http_response_code(401);
+            echo json_encode(array("message" => "Authentication Failed"));
+
+        };
 
 } else {
     http_response_code(400); //Placeholder

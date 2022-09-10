@@ -497,6 +497,56 @@ class find_reply_Query
 
 }
 
+  ////                            ////
+ // Class Query to Get Single Post //
+////                            ////
+
+class find_post_Query
+{
+    var $sql;
+    var $post_id;
+    var $result;
+
+   public function query_db(){
+        try {
+
+            $host = 'localhost';
+            $db = 'fiftybitdotchat';
+            $user = 'fiftybit-client';
+            $password = 'H7$ng';
+            $port = '5432';
+
+            $conn = "pgsql:host=$host;port=$port;dbname=$db;";
+
+            $pdo = new PDO($conn, $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+
+        if ($pdo) {
+                $stmt = $pdo->prepare($this->sql); //Prepare the statement
+
+                //Sanitize the variables
+                
+                
+                //Bind variables
+
+                $stmt->bindParam(":post_id", $this->post_id); 
+               
+                $stmt->execute(); //run the query
+
+                $this->sql = null; //Set SQL variable back to null because we don't need the string
+                $this->result = $stmt->fetchAll();
+                return $this->result; 
+            }
+            } catch (PDOException $e) { //Exception handling
+                die($e->getMessage());
+        } finally {
+            if ($pdo) {
+                $pdo = null;
+            }
+        }
+    }
+
+}
+
   ////                  ////
  // Class Query to Login //
 ////                  ////

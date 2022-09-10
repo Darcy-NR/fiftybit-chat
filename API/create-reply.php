@@ -1,11 +1,8 @@
 <?php
 
 require("../config/db_conn.php");
+require("../config/auth.php");
 
-// PLACEHOLDER USER ID
-// THIS IS GOING TO COME FROM JWT
-// FOR NOW THIS IS JUST TO MAKE SURE THE POSTS WORK
-$user_id = 1;
 
 //User Input Variable
 $new_reply_data = json_decode(file_get_contents("php://input"));
@@ -22,17 +19,35 @@ $reply_content = $new_reply_data->reply_content;
 //Check
 if (!empty($new_reply_data->reply_content)){
 
-    $createReply = new createReply_Query;
-    $createReply->sql = 'INSERT INTO fiftybitdotchat.replies(user_id, post_id, reply_content)
-    VALUES (:user_id, :post_id, :reply_content)';
-    $createReply->user_id = $user_id;
-    $createReply->post_id = $post_id;
-    $createReply->reply_content = $reply_content;
+    $headers = apache_request_headers();
+    $token = str_replace('Bearer ', '', $headers['Authorization']);
 
-    $createReply->query_db();
+        $check_auth = new auth_token;
+        $check_auth->token = $token;
+        $check_auth->authenticate();
 
-    http_response_code(200);
-    echo json_encode(array("message" => "Post Created!"));
+        if(!empty($check_auth->decoded->user_id)){
+
+            $user_id = $check_auth->decoded->user_id;
+
+            $createReply = new createReply_Query;
+            $createReply->sql = 'INSERT INTO fiftybitdotchat.replies(user_id, post_id, reply_content)
+            VALUES (:user_id, :post_id, :reply_content)';
+            $createReply->user_id = $user_id;
+            $createReply->post_id = $post_id;
+            $createReply->reply_content = $reply_content;
+        
+            $createReply->query_db();
+        
+            http_response_code(200);
+            echo json_encode(array("message" => "Post Created!"));
+
+        } else {
+            http_response_code(401); //Placeholder
+            echo json_encode(array("message" => "Authentication Failed"));
+        }
+
+
 
 
 } else {

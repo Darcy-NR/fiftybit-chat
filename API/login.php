@@ -1,6 +1,9 @@
 <?php
 
 require("../config/db_conn.php");
+require("../config/auth.php");
+
+
 
 $login_json = json_decode(file_get_contents("php://input"));
 $user_id = $login_json->user_id;
@@ -26,6 +29,23 @@ if (!empty($user_id) && !empty($username) && !empty($password)){
             echo json_encode(array("message" => "This password matches."));
             
             //Generate JWT here, set to expire in 2 months.
+
+            $token_gen = new create_token;
+            $token_gen->user_id = $user_id;
+            $token_gen->new_auth();
+
+            if($token_gen->new_auth()){
+                http_response_code(200);
+                echo json_encode(
+                    $token_gen->new_auth()
+                );
+            } else {
+                http_response_code(400);
+                echo json_encode(array(
+                    'message01' => 'Failed to authenticate.'
+                ));
+            }
+
 
         } else {
             http_response_code(401);
