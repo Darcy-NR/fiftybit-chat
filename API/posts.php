@@ -12,7 +12,7 @@ if (isset($_GET['subforum'])){
     $subforum_id = $_GET['subforum']; //Get all replies by subforum query string
 
     $posts = new posts_by_subforum_Query; //Initiate the Class
-    $posts->sql = 'SELECT * FROM fiftybitdotchat.posts WHERE subforum_id =:subforum'; //Pass in SQL query
+    $posts->sql = 'SELECT * FROM fiftybitdotchat.posts WHERE subforum_id =:subforum LIMIT 1'; //Pass in SQL query
     $posts->subforum_id = $subforum_id; //Pass in the variable to prepare
     $posts->query_db(); //Initiate the method
 
