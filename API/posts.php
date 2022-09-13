@@ -2,6 +2,10 @@
 
 require("../config/db_conn.php");
 
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+
+echo "[";
 if (isset($_GET['subforum'])){
     http_response_code(200);
 
@@ -13,8 +17,11 @@ if (isset($_GET['subforum'])){
     $posts->query_db(); //Initiate the method
 
     $row = $posts->result;
+    $x = 1;
+    $length = count($row);
 
     foreach ($posts->result as $row) {
+
         $post_id = $row['post_id'];
         $user_id = $row['user_id'];
         $datetime = $row['datetime'];
@@ -40,7 +47,17 @@ if (isset($_GET['subforum'])){
         "emote_interesting" => $emote_interesting,
         "emote_bit" => $emote_bit
     ));
+
+    if($x === $length){
+        echo "";
+    } else {
+        echo ",";
     }
+
+    $x++;
+
+    }
+    echo "]";
 
 
 
