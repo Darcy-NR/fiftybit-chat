@@ -6,22 +6,18 @@ header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
 echo "[";
-if (isset($_GET['subforum'])){
+if (isset($_GET['post-id'])){
     http_response_code(200);
 
-    $subforum_id = $_GET['subforum']; //Get all replies by subforum query string
+    $post_id = $_GET['post-id']; //Get all with this Post_id 
 
-    $posts = new posts_by_subforum_Query; //Initiate the Class
-    $posts->sql = 'SELECT * FROM fiftybitdotchat.posts WHERE subforum_id =:subforum'; //Pass in SQL query
-    $posts->subforum_id = $subforum_id; //Pass in the variable to prepare
-    $posts->query_db(); //Initiate the method
+    $thread = new thread_OP_Query; //Initiate the Class
+    $thread->sql = 'SELECT * FROM fiftybitdotchat.posts WHERE post_id = :post_id'; //Pass in SQL query
+    $thread->post_id = $post_id; //Pass in the variable to prepare
+    $thread->query_db(); //Initiate the method
 
-    $row = $posts->result;
-    $x = 1;
-    $length = count($row);
-
-    foreach ($posts->result as $row) {
-
+    //For loop for thread OP
+    foreach ($thread->result as $row) {
         $post_id = $row['post_id'];
         $user_id = $row['user_id'];
         $datetime = $row['datetime'];
@@ -47,26 +43,12 @@ if (isset($_GET['subforum'])){
         "emote_interesting" => $emote_interesting,
         "emote_bit" => $emote_bit
     ));
-
-    if($x === $length){
-        echo "";
-    } else {
-        echo ",";
     }
+echo "]";
 
-    $x++;
-
-    }
-    echo "]";
-
-
-
-
-    
 } else {
     http_response_code(400); //Placeholder
     echo json_encode(array("message" => "There IS NOT an id in query string."));
 }
-
 
 ?>

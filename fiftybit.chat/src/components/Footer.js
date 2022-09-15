@@ -2,9 +2,9 @@ import React from "react";
 
 function Footer() {
     return (
-        <header>
+        <footer>
             This is a footer if you can't tell
-        </header>
+        </footer>
     )
 }
 

@@ -1,0 +1,39 @@
+[
+    {
+        "post_id": "6",
+        "user_id": "1",
+        "datetime": "18:59:38.830117",
+        "post_title": "My first test post!",
+        "post_content": "Hi everybody this is a test post look at this test post",
+        "post_hotlink": "https://www.google.com/",
+        "emote_like": 0,
+        "emote_funny": 0,
+        "emote_sad": 0,
+        "emote_interesting": 0,
+        "emote_bit": 0
+    },
+    {
+        "reply_id": "2",
+        "user_id": "2",
+        "post_id": "6",
+        "datetime": "2022-09-06 21:29:49.831224+10",
+        "reply_content": "Hello this is a reply to your post!",
+        "emote_like": 0,
+        "emote_funny": 0,
+        "emote_sad": 0,
+        "emote_interesting": 0,
+        "emote_bit": 0
+    },
+    {
+        "reply_id": "3",
+        "user_id": "1",
+        "post_id": "6",
+        "datetime": "2022-09-06 21:30:13.934235+10",
+        "reply_content": "Thank you for you reply!",
+        "emote_like": 0,
+        "emote_funny": 0,
+        "emote_sad": 0,
+        "emote_interesting": 0,
+        "emote_bit": 0
+    },
+]

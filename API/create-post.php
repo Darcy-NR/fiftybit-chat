@@ -9,7 +9,7 @@ $new_post_data = json_decode(file_get_contents("php://input"));
 
 //Post Subforum ID
 $subforum_id = $new_post_data->subforum_id;
-
+//Change this to a GET!!!!
 
 $post_title = $new_post_data->post_title;
 $post_content = $new_post_data->post_content;

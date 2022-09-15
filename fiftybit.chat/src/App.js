@@ -9,13 +9,9 @@ import Navbar from './components/Navbar';
 function App() {
   return (
 <div>
-  
-<Header /> <Navbar />
-
-{/* <HelloWorld name = "Nick" /> */}
+<Navbar />
 
 <Footer />
-
 </div>
   );
 }

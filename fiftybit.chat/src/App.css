@@ -28,6 +28,38 @@
   color: #61dafb;
 }
 
+.read_more {
+  background: lightgray;
+}
+
+.post_container {
+  background-color: whitesmoke;
+  width: 90%;
+  margin: auto;
+}
+
+.reply_container {
+  background-color: linen;
+  width: 90%;
+  margin: auto;
+}
+nav {
+  background-color: linen;
+  padding-bottom: .5em;
+  margin-bottom: .5em;
+}
+
+footer {
+  margin-top: 1em;
+  background-color: linen;
+  padding: 1em;
+}
+
+.forum_box {
+  background-color: whitesmoke;
+  padding: 1em;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
